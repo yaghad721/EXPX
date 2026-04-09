@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EXPX Website</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Zeyada&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #fcf8f5;     
+            --text-main: #2d2d2d;    
+            --text-sub: #5d4037;     
+            --accent: #ffb7c5;       
+            --accent-soft: #ffe4e8;  
+            --card-bg: #ffffff;      
+            --discord: #5865F2;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* --- ADVANCED AUTO-SCALE SYSTEM --- */
+        html { 
+            font-size: 16px; 
+            overflow-x: hidden;
+            text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (max-width: 1400px) { html { font-size: 1.1vw; } }
+        @media (max-width: 1024px) { html { font-size: 1.4vw; } } 
+        @media (max-width: 768px) {  html { font-size: 13px; } } 
+        @media (max-width: 480px) {  html { font-size: 11px; } }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow-x: hidden; scroll-behavior: smooth; background-color: var(--bg-color); }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            line-height: 1.7; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- SAKURA CANVAS --- */
+        #sakura-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Navbar Minimalis */
+        .navbar { 
+            position: fixed; top: 0; width: 100%; padding: 25px 8%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(252, 248, 245, 0.85); backdrop-filter: blur(12px); 
+            z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+        .logo { 
+            font-family: 'Zeyada', cursive; 
+            font-size: 3rem; 
+            color: var(--text-sub); 
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .logo:hover { transform: rotate(-5deg); color: var(--accent); }
+
+        .nav-links { display: flex; list-style: none; gap: 35px; }
+        .nav-links a { 
+            color: var(--text-main); text-decoration: none; 
+            font-size: 0.85rem; font-weight: 600; text-transform: uppercase; 
+            letter-spacing: 1.5px; transition: var(--transition); cursor: pointer;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px; 
+            bottom: -6px; left: 0; background-color: var(--accent); 
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+        /* Content Wrapper */
+        .content-wrapper { 
+            padding: 110px 5% 60px; 
+            display: flex; 
+            justify-content: center;
+            width: 100%;
+        }
+        .tab-content { 
+            display: none; 
+            width: 100%; 
+            max-width: 1200px; 
+            animation: smoothFade 0.7s ease-out; 
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes smoothFade { 
+            from { opacity: 0; transform: translateY(20px); filter: blur(10px); } 
+            to { opacity: 1; transform: translateY(0); filter: blur(0); } 
+        }
+
+        /* Branding Home */
+        .brand-box { margin-bottom: 15px; }
+        .brand-jp { 
+            font-family: 'Zen Old Mincho', serif; 
+            font-size: 1.1rem; color: var(--accent); 
+            font-weight: 700; letter-spacing: 5px; margin-bottom: 5px;
+        }
+        .brand-title { 
+            font-family: 'Zeyada', cursive; 
+            font-size: clamp(4rem, 15vw, 9rem); 
+            font-weight: 400; color: var(--text-sub); 
+            line-height: 0.7; margin: 15px 0;
+        }
+        .brand-sub { 
+            font-weight: 400; letter-spacing: 4px; font-size: 0.95rem; 
+            color: var(--text-main); opacity: 0.6; text-transform: uppercase;
+        }
+
+        /* Grid System */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            margin-top: 25px;
+            width: 100%;
+        }
+
+        /* Minimalist Cards */
+        .glass-card { 
+            background: var(--card-bg); 
+            padding: 35px 25px; border-radius: 8px; 
+            border: 1px solid rgba(0,0,0,0.04); 
+            transition: var(--transition);
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .glass-card:hover { 
+            border-color: var(--accent-soft);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(111, 78, 55, 0.08);
+        }
+
+        .glass-card h3 { 
+            font-family: 'Zen Old Mincho', serif; 
+            font-weight: 700; font-size: 1.4rem; 
+            color: var(--text-sub); margin-bottom: 25px; 
+            position: relative; display: inline-block;
+        }
+        .glass-card h3::after {
+            content: ''; position: absolute; width: 40%; height: 2px;
+            bottom: -8px; left: 30%; background: var(--accent-soft);
+        }
+
+        /* Form Elements & File Upload */
+        select, input { 
+            width: 100%; padding: 14px; margin: 12px 0; 
+            background: #fdfdfd; border: 1px solid #e0e0e0; 
+            color: var(--text-main); border-radius: 4px; font-family: inherit; outline: none;
+            font-size: 0.9rem; transition: var(--transition);
+        }
+        input[type="file"] {
+            padding: 10px;
+            background: var(--bg-color);
+            border: 1px dashed var(--accent);
+            cursor: pointer;
+        }
+        select:focus, input:focus { border-color: var(--accent); background: #fff; }
+
+        .btn { 
+            background: var(--text-sub); color: #fff; 
+            padding: 16px; border: none; border-radius: 4px; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px; 
+            cursor: pointer; transition: var(--transition); width: 100%; margin-top: auto;
+            font-size: 0.8rem;
+        }
+        .btn:hover { background: var(--accent); transform: scale(1.02); box-shadow: 0 8px 20px rgba(255, 183, 197, 0.4); }
+
+        /* Responsive Mobile & Tablet */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 10px; padding: 15px; }
+            .nav-links { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .content-wrapper { padding-top: 170px; } 
+            .grid { grid-template-columns: 1fr; gap: 20px; margin-top: 15px; }
+            .glass-card { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body onclick="playMusic()">
+
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.discordapp.com/attachments/1123607102749933618/1491766077644996739/Wildflowers-chosic.com_.mp3?ex=69d8e2ec&is=69d7916c&hm=74fc59e04db5950577f4809546d1ac949f8a47b942518c889557114f189c0e74&" type="audio/mpeg">
+    </audio>
+
+    <canvas id="sakura-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="logo" onclick="openTab(null, 'home')">EXPX</div>
+        <ul class="nav-links">
+            <li><a onclick="openTab(event, 'home')" class="active">Beranda</a></li>
+            <li><a onclick="openTab(event, 'produk')">Layanan</a></li>
+            <li><a onclick="openTab(event, 'free')">Unduhan</a></li>
+            <li><a onclick="openTab(event, 'testi')">Ulasan</a></li>
+            <li><a onclick="window.open('https://discord.gg/YNWKvym85V')" style="color: var(--discord);">Discord</a></li>
+        </ul>
+    </nav>
+
+    <div class="content-wrapper">
+        <div id="home" class="tab-content active" style="text-align:center;">
+            <div class="brand-box">
+                <p class="brand-jp">Welcome To Website</p>
+                <h1 class="brand-title">EXPX</h1>
+            </div>
+            <p class="brand-sub">Kami Menyediakan Panel Aimbot Remote/Stream, Set PC, Dan Juga Optimize PC Serta File Gratis Yang Ada Di Website Kami!, Untuk Info Lebih Lanjut Bisa Masuk Discord Kami Yang Ada Di Menu Kanan Atas, Terimakasih!</p>
+        </div>
+
+        <div id="produk" class="tab-content">
+            <div class="grid">
+                <div class="glass-card">
+                    <h3>Aimbot Stream</h3>
+                    <select id="streamDur">
+                        <option value="1 Hari — Rp 5.000">Durasi: 1 Hari — Rp 5.000</option>
+                        <option value="3 Hari — Rp 14.000">Durasi: 3 Hari — Rp 14.000</option>
+                        <option value="7 Hari — Rp 25.000">Durasi: 7 Hari — Rp 25.000</option>
+                        <option value="14 Hari — Rp 55.000">Durasi: 14 Hari — Rp 55.000</option>
+                        <option value="30 Hari — Rp 88.000">Durasi: 30 Hari — Rp 88.000</option>
+                    </select>
+                    <button class="btn btn-secure" onclick="openTab(null, 'bayar', 'streamDur', 'Aimbot Stream')">Beli Sekarang</button>
+                </div>
+                <div class="glass-card">
+                    <h3>Aimbot Remote</h3>
+                    <select id="remoteDur">
+                        <option value="1 Hari — Rp 7.000">Durasi: 1 Hari — Rp 7.000</option>
+                        <option value="3 Hari — Rp 20.000">Durasi: 3 Hari — Rp 20.000</option>
+                        <option value="7 Hari — Rp 35.000">Durasi: 7 Hari — Rp 35.000</option>
+                        <option value="14 Hari — Rp 65.000">Durasi: 14 Hari — Rp 65.000</option>
+                        <option value="30 Hari — Rp 100.000">Durasi: 30 Hari — Rp 100.000</option>
+                    </select>
+                    <button class="btn btn-secure" onclick="openTab(null, 'bayar', 'remoteDur', 'Aimbot Remote')">Beli Sekarang</button>
+                </div>
+                <div class="glass-card">
+                    <h3>Paid Optimizer</h3>
+                    <p class="price-tag" style="font-size: 2rem; font-weight: 700; color: var(--text-sub); margin-bottom: 25px; font-family: 'Zen Old Mincho', serif;">Rp 30.000</p>
+                    <button class="btn btn-secure" onclick="openTab(null, 'bayar', 'fixed-30', 'Paid Optimizer')">Beli Sekarang</button>
+                </div>
+                <div class="glass-card">
+                    <h3>PC Set</h3>
+                    <p class="price-tag" style="font-size: 2rem; font-weight: 700; color: var(--text-sub); margin-bottom: 25px; font-family: 'Zen Old Mincho', serif;">Rp 20.000</p>
+                    <button class="btn btn-secure" onclick="openTab(null, 'bayar', 'fixed-20', 'PC Set')">Beli Sekarang</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="free" class="tab-content">
+            <div class="grid">
+                
+                <div class="glass-card">
+                    <h3>Emulator Bluestacks App Player 5</h3>
+                    <p style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.6;">Optimasi Emulator</p>
+                    <button class="btn btn-secure" onclick="window.open('https://github.com/yaghad721/All-File/raw/21a8e757f30f76510d342c09fdcbeb04e350324e/bluestacks-app-player-5-21-630-1018.exe')">Unduh File</button>
+                </div>
+                <div class="glass-card">
+                    <h3>Emulator MSI App Player 5</h3>
+                    <p style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.6;">High Performance Engine</p>
+                    <button class="btn btn-secure" onclick="window.open('https://github.com/yaghad721/All-File/raw/21a8e757f30f76510d342c09fdcbeb04e350324e/MSI%20APP%20Player.exe')">Unduh File</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="testi" class="tab-content">
+            <div class="grid">
+                <div class="glass-card testi-card">
+                    <span class="testi-user">@Alpha_User</span>
+                    <p class="testi-text">"Panel Aimbot Nya Sangat Bagus Dan Pelayanan Nya Sangat Top!"</p>
+                </div>
+                <div class="glass-card testi-card">
+                    <span class="testi-user">@Nabiel</span>
+                    <p class="testi-text">"Set PC Punya EXPX Ini Gacor Parah!, Sampai Dituduh Pakai Cheat Sama Musuh Anjir"</p>
+                </div>
+                <div class="glass-card testi-card">
+                    <span class="testi-user">@Fardhan</span>
+                    <p class="testi-text">"Optimize Nya Lumayan Gacor!, PC Ku Yang Tadi Nya Sering Stuttering Dan Frame Drop Tiba², Sekarang Jadi Lancarr"</p>
+                 </div>
+            </div>
+        </div>
+
+        <div id="bayar" class="tab-content">
+            <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 40px 40px; border-radius: 8px; text-align: center; border: 1px solid rgba(0,0,0,0.05);">
+                <h2 id="payTitle" style="font-family: 'Zen Old Mincho', serif; font-weight: 700; color: var(--text-sub); font-size: 1.4rem; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px;">Konfirmasi Pembayaran</h2>
+                
+                <p id="productName" style="font-weight: 600; color: var(--text-sub); margin-bottom: 5px;"></p>
+                <p id="selectedPrice" style="font-weight: 800; color: var(--accent); font-size: 1.2rem; margin-bottom: 20px;"></p>
+
+                <img src="https://cdn.discordapp.com/attachments/1123607102749933618/1491765232056668256/QRIS-4_1.jpg?ex=69d8e222&is=69d790a2&hm=9b979f3d8c0b0a962c2c4989e2349d84f994799a8a7c8c5cf639d4697cbc224f&" style="width: 200px; margin: 0 auto 20px; border-radius: 4px; display: block; border: 1px solid #eee;">
+                
+                <p style="font-size: 0.85rem; margin-bottom: 15px; color: #666;">Silakan scan QRIS sesuai harga di atas, lalu unggah bukti transfer.</p>
+                
+                <input type="text" id="discordInput" placeholder="ID Discord (contoh: user#1234)">
+                
+                <p style="font-size: 0.75rem; text-align: left; margin-bottom: 5px; color: var(--text-sub); font-weight: 600;">Upload Bukti Transfer:</p>
+                <input type="file" id="proofUpload" accept="image/*">
+                
+                <button class="btn btn-secure" id="submitPayment" onclick="handlePayment()">Kirim Bukti Bayar</button>
+                <button class="btn" style="background: none; color: #999; border: 1px solid #eee; margin-top: 15px;" onclick="openTab(null, 'produk')">Kembali ke Layanan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSelection = { name: "", details: "" };
+
+        const SecuritySystem = {
+            requestLog: [],
+            isBlocked: false,
+            maxRequests: 8,
+            timeWindow: 6000,
+            blockDuration: 15000,
+            checkSpam() {
+                if (this.isBlocked) return true;
+                const now = Date.now();
+                this.requestLog.push(now);
+                this.requestLog = this.requestLog.filter(time => now - time < this.timeWindow);
+                if (this.requestLog.length > this.maxRequests) {
+                    this.isBlocked = true;
+                    alert("⚠️ Keamanan: Aktivitas tidak wajar terdeteksi. Akses dibatasi sementara (15s).");
+                    setTimeout(() => { this.isBlocked = false; this.requestLog = []; }, this.blockDuration);
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        function playMusic() {
+            if (SecuritySystem.isBlocked) return;
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.3;
+            music.play().catch(() => {});
+        }
+
+        async function handlePayment() {
+            if (SecuritySystem.checkSpam()) return;
+
+            const discordId = document.getElementById('discordInput').value;
+            const fileInput = document.getElementById('proofUpload');
+            const btn = document.getElementById('submitPayment');
+
+            if (!discordId || !fileInput.files[0]) {
+                alert("Harap masukkan ID Discord dan upload bukti transfer!");
+                return;
+            }
+
+            // URL WEBHOOK LU
+            const webhookURL = "https://discord.com/api/webhooks/1491788379875184851/v0OUs7KzBJ48AP278SMaRqLFd5vEmrBKruIFBMGtX4myyh7TWBYKshqxkmD88bdO7Pfw";
+
+            btn.disabled = true;
+            btn.innerText = "Mengirim...";
+
+            const formData = new FormData();
+            const message = {
+                content: "🔔 **PESANAN BARU MASUK!**",
+                embeds: [{
+                    title: "Detail Pembayaran EXPX",
+                    color: 0xffb7c5,
+                    fields: [
+                        { name: "ID Discord", value: discordId, inline: true },
+                        { name: "Produk", value: currentSelection.name, inline: true },
+                        { name: "Detail/Harga", value: currentSelection.details, inline: false }
+                    ],
+                    timestamp: new Date()
+                }]
+            };
+
+            formData.append("payload_json", JSON.stringify(message));
+            formData.append("file", fileInput.files[0]);
+
+            try {
+                const response = await fetch(webhookURL, { method: "POST", body: formData });
+                if (response.ok) {
+                    alert("✅ Bukti berhasil dikirim! Silakan tunggu konfirmasi di Discord.");
+                    document.getElementById('discordInput').value = "";
+                    fileInput.value = "";
+                    openTab(null, 'home');
+                } else { throw new Error(); }
+            } catch (error) {
+                alert("❌ Gagal kirim! Cek koneksi atau Webhook URL.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Kirim Bukti Bayar";
+            }
+        }
+
+        // --- SAKURA ENGINE ---
+        const canvas = document.getElementById('sakura-canvas');
+        const ctx = canvas.getContext('2d');
+        let petals = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Petal {
+            constructor() { this.init(); }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.w = Math.random() * 5 + 3;
+                this.h = Math.random() * 3 + 2;
+                this.opacity = Math.random() * 0.4 + 0.1;
+                this.velX = Math.random() * 1 - 0.5;
+                this.velY = Math.random() * 0.7 + 0.7; 
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = Math.random() * 0.015;
+            }
+            update() {
+                this.x += this.velX; this.y += this.velY; this.rotation += this.rotSpeed;
+                if (this.y > canvas.height) this.init();
+            }
+            draw() {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation);
+                ctx.beginPath(); ctx.ellipse(0, 0, this.w, this.h, 0, 0, 2 * Math.PI);
+                ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`; ctx.fill(); ctx.restore();
+            }
+        }
+        function setup() { petals = []; const count = window.innerWidth < 768 ? 20 : 50; for (let i = 0; i < count; i++) petals.push(new Petal()); }
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); petals.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        window.addEventListener('resize', () => { resize(); setup(); });
+        resize(); setup(); animate();
+
+        // --- NAV & LOGIC ---
+        function openTab(evt, tabName, priceRef, prodName) {
+            if (SecuritySystem.isBlocked) return;
+            if (tabName === 'bayar' && priceRef) {
+                const priceLabel = document.getElementById('selectedPrice');
+                const nameLabel = document.getElementById('productName');
+                currentSelection.name = prodName;
+                nameLabel.innerText = "Produk: " + prodName;
+                if (priceRef === 'fixed-30') { currentSelection.details = "Rp 30.000"; } 
+                else if (priceRef === 'fixed-20') { currentSelection.details = "Rp 20.000"; } 
+                else {
+                    const selectElem = document.getElementById(priceRef);
+                    currentSelection.details = selectElem.options[selectElem.selectedIndex].value;
+                }
+                priceLabel.innerText = "Pembayaran: " + currentSelection.details;
+            }
+            const contents = document.querySelectorAll(".tab-content");
+            contents.forEach(c => c.classList.remove("active"));
+            const links = document.querySelectorAll(".nav-links a");
+            links.forEach(l => l.classList.remove("active"));
+            document.getElementById(tabName).classList.add("active");
+            if(evt) evt.currentTarget.classList.add("active");
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // --- PROTECTION ---
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) return false;
+        };
+
+        (function() {
+            const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent) || !navigator.webdriver === false;
+            if (isBot) { document.body.innerHTML = "<h1>Access Denied</h1>"; return; }
+            const trap = document.createElement('input'); trap.type = 'text'; trap.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
+            trap.id = '_sec_hp_token_'; document.body.appendChild(trap);
+        })();
+    </script>
+</body>
+</html>
